@@ -1,0 +1,25 @@
+{
+  "source_image": "data/originals/simple_object.png",
+  "original_bbox": [
+    190,
+    175,
+    630,
+    630
+  ],
+  "buffered_bbox": [
+    140,
+    125,
+    680,
+    680
+  ],
+  "padding": 50,
+  "patch_path": "data/patches/simple_object/yellow_fruit.png",
+  "edited_patch_path": "data/edited_patches/simple_object/yellow_fruit_edited.png",
+  "description": "Change to yellow",
+  "session_name": "yellow_fruit",
+  "timestamp": "2025-11-15T20:56:09.590492",
+  "source_dimensions": [
+    740,
+    740
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "source_image": "data/originals/portrait.png",
+  "original_bbox": [
+    40,
+    40,
+    400,
+    350
+  ],
+  "buffered_bbox": [
+    0,
+    0,
+    450,
+    400
+  ],
+  "padding": 50,
+  "patch_path": "data/patches/portrait/sky_top_left.png",
+  "description": "Top-left sky region for adding flying birds",
+  "timestamp": "2025-11-15T17:08:08.594644",
+  "source_dimensions": [
+    864,
+    1184
+  ]
+}
