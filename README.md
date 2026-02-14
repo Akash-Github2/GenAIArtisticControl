@@ -1,8 +1,6 @@
-# Modular GenAI Image Editing
+# Modular GenAI Image Editing (UCLA Capstone)
 
-A pipeline for making targeted edits to specific regions of an image using GenAI, without affecting the rest of the composition. Built as a UCLA CS Master's capstone project.
-
-Instead of passing an entire image to GenAI and risking unintended changes, this tool isolates a region, edits just that patch, and blends it back seamlessly.
+A pipeline for making targeted edits to specific regions of an image using GenAI, without affecting the rest of the composition. Instead of passing an entire image to GenAI and risking unintended changes, this tool isolates a region, edits just that patch, and blends it back seamlessly. It's an experiment to see if modular GenAI image editing will produce better results than re-prompting the full image.
 
 ## Setup
 
