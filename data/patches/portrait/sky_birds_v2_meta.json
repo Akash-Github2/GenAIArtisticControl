@@ -1,0 +1,20 @@
+{
+  "source_image": "data/originals/portrait.png",
+  "original_bbox": [
+    40,
+    40,
+    400,
+    350
+  ],
+  "buffered_bbox": [
+    0,
+    0,
+    440,
+    390
+  ],
+  "padding": 40,
+  "patch_path": "data/patches/portrait/sky_birds_v2.png",
+  "edited_patch_path": "data/edited_patches/portrait/sky_birds_v2_edited.png",
+  "description": "Add a small flock\n  of birds flying across the sky. Do not change the sky colors, lighting, clouds, or any\n  other part of the image. Only add birds.",
+  "session_name": "sky_birds_v2"
+}
