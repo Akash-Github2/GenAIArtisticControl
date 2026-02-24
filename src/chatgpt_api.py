@@ -44,7 +44,7 @@ def resize_to(image_path, target_size, output_path=None):
 
 
 def edit_image_with_api(image_path, prompt, output_path, max_retries=MAX_RETRIES):
-    # Send patch to gpt-image-1 for editing, then resize result back to original dimensions
+    # send image to gpt-image-1 for editing, resize result back
     client = get_api_client()
     original_size = get_image_dimensions(image_path)
     api_size = pick_api_size(*original_size)
@@ -66,6 +66,48 @@ def edit_image_with_api(image_path, prompt, output_path, max_retries=MAX_RETRIES
                 f.write(image_bytes)
 
             # resize back to original patch dimensions
+            resize_to(output_path, original_size, output_path)
+            return output_path
+
+        except (RateLimitError, APIConnectionError) as e:
+            last_error = e
+            wait = 2 ** attempt
+            print(f"  Retrying in {wait}s... ({e})")
+            time.sleep(wait)
+
+        except APIError as e:
+            last_error = e
+            if attempt == max_retries - 1:
+                raise
+            wait = 2 ** attempt
+            print(f"  API error, retrying in {wait}s... ({e})")
+            time.sleep(wait)
+
+    raise ValueError(f"Failed after {max_retries} attempts: {last_error}")
+
+
+def blend_images_with_api(original_path, spliced_path, prompt, output_path, max_retries=MAX_RETRIES):
+    # send both images to gpt-image-1 for blending, resize result back
+    client = get_api_client()
+    original_size = get_image_dimensions(original_path)
+    api_size = pick_api_size(*original_size)
+
+    last_error = None
+    for attempt in range(max_retries):
+        try:
+            with open(original_path, "rb") as orig_f, open(spliced_path, "rb") as spliced_f:
+                response = client.images.edit(
+                    model=EDIT_MODEL,
+                    image=[orig_f, spliced_f],
+                    prompt=prompt,
+                    size=api_size,
+                )
+
+            image_bytes = base64.b64decode(response.data[0].b64_json)
+            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+            with open(output_path, 'wb') as f:
+                f.write(image_bytes)
+
             resize_to(output_path, original_size, output_path)
             return output_path
 

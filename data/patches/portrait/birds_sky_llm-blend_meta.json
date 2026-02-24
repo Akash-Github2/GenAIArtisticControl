@@ -1,0 +1,20 @@
+{
+  "source_image": "data/originals/portrait.png",
+  "original_bbox": [
+    0,
+    0,
+    400,
+    350
+  ],
+  "buffered_bbox": [
+    0,
+    0,
+    430,
+    380
+  ],
+  "padding": 30,
+  "patch_path": "data/patches/portrait/birds_sky_llm-blend.png",
+  "edited_patch_path": "data/edited_patches/portrait/birds_sky_llm-blend_edited.png",
+  "description": "add a flock of birds flying in the sky",
+  "session_name": "birds_sky"
+}
