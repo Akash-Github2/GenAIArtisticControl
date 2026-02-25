@@ -1,0 +1,20 @@
+{
+  "source_image": "data/originals/complex_market_scene.png",
+  "original_bbox": [
+    200,
+    0,
+    450,
+    150
+  ],
+  "buffered_bbox": [
+    175,
+    0,
+    475,
+    175
+  ],
+  "padding": 25,
+  "patch_path": "data/patches/complex_market_scene/lantern_llm-blend.png",
+  "edited_patch_path": "data/edited_patches/complex_market_scene/lantern_llm-blend_edited.png",
+  "description": "add a red paper lantern hanging above the street",
+  "session_name": "lantern"
+}
