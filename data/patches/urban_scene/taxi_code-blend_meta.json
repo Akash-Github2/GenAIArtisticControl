@@ -1,18 +1,11 @@
 {
   "source_image": "data/originals/urban_scene.png",
-  "original_bbox": [
-    50,
-    100,
-    180,
-    210
-  ],
-  "buffered_bbox": [
+  "bbox": [
     30,
-    80,
+    55,
     200,
     225
   ],
-  "padding": 20,
   "patch_path": "data/patches/urban_scene/taxi_code-blend.png",
   "edited_patch_path": "data/edited_patches/urban_scene/taxi_code-blend_edited.png",
   "description": "add a bright yellow taxi cab in the middle of the road",

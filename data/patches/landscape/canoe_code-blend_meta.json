@@ -1,18 +1,11 @@
 {
   "source_image": "data/originals/landscape.png",
-  "original_bbox": [
+  "bbox": [
     200,
-    250,
-    550,
-    450
+    270,
+    560,
+    510
   ],
-  "buffered_bbox": [
-    170,
-    220,
-    580,
-    480
-  ],
-  "padding": 30,
   "patch_path": "data/patches/landscape/canoe_code-blend.png",
   "edited_patch_path": "data/edited_patches/landscape/canoe_code-blend_edited.png",
   "description": "add a wooden canoe floating on the lake",

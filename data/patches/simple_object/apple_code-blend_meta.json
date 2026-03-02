@@ -1,18 +1,11 @@
 {
   "source_image": "data/originals/simple_object.png",
-  "original_bbox": [
-    180,
-    120,
-    560,
-    530
+  "bbox": [
+    80,
+    50,
+    670,
+    640
   ],
-  "buffered_bbox": [
-    150,
-    90,
-    590,
-    560
-  ],
-  "padding": 30,
   "patch_path": "data/patches/simple_object/apple_code-blend.png",
   "edited_patch_path": "data/edited_patches/simple_object/apple_code-blend_edited.png",
   "description": "turn the orange into a green apple",

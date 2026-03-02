@@ -15,21 +15,13 @@ def get_patch_subdirectory(image_path, base_dir="data/patches"):
     return subdir
 
 
-def crop_with_buffer(image_path, x1, y1, x2, y2, padding, out_path):
+def crop_region(image_path, x1, y1, x2, y2, out_path):
     img = Image.open(image_path).convert("RGBA")
-    width, height = img.size
-
-    # expand by padding, clamped to image bounds
-    bx1 = max(0, x1 - padding)
-    by1 = max(0, y1 - padding)
-    bx2 = min(width, x2 + padding)
-    by2 = min(height, y2 + padding)
-
-    patch = img.crop((bx1, by1, bx2, by2))
+    patch = img.crop((x1, y1, x2, y2))
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     patch.save(out_path, 'PNG')
 
-    return (bx1, by1, bx2, by2)
+    return (x1, y1, x2, y2)
 
 
 def save_crop_metadata(meta_dict, meta_path):

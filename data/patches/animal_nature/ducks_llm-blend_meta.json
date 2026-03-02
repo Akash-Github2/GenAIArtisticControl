@@ -1,18 +1,11 @@
 {
   "source_image": "data/originals/animal_nature.png",
-  "original_bbox": [
-    150,
-    250,
-    500,
-    420
+  "bbox": [
+    440,
+    360,
+    590,
+    460
   ],
-  "buffered_bbox": [
-    120,
-    220,
-    530,
-    450
-  ],
-  "padding": 30,
   "patch_path": "data/patches/animal_nature/ducks_llm-blend.png",
   "edited_patch_path": "data/edited_patches/animal_nature/ducks_llm-blend_edited.png",
   "description": "add a pair of ducks swimming in the river",

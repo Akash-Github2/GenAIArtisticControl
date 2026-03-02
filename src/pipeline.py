@@ -3,12 +3,12 @@ import os
 import argparse
 sys.path.append('src')
 
-from crop import crop_with_buffer, save_crop_metadata, get_patch_subdirectory
+from crop import crop_region, save_crop_metadata, get_patch_subdirectory
 from chatgpt_api import edit_image_with_api
 from blend import blend_patch_back
 
 
-def run_pipeline(image_name, x1, y1, x2, y2, padding, session_name, prompt):
+def run_pipeline(image_name, x1, y1, x2, y2, session_name, prompt):
     original_path = f"data/originals/{image_name}.png"
     patch_dir = get_patch_subdirectory(original_path)
     edited_dir = f"data/edited_patches/{image_name}"
@@ -22,13 +22,11 @@ def run_pipeline(image_name, x1, y1, x2, y2, padding, session_name, prompt):
     output_path = os.path.join(output_dir, f"{session_name}_result.png")
 
     # 1. crop
-    print(f"[1/3] Cropping ({x1},{y1})-({x2},{y2}) padding={padding}px")
-    bbox = crop_with_buffer(original_path, x1, y1, x2, y2, padding, patch_path)
+    print(f"[1/3] Cropping ({x1},{y1})-({x2},{y2})")
+    bbox = crop_region(original_path, x1, y1, x2, y2, patch_path)
     save_crop_metadata({
         "source_image": original_path,
-        "original_bbox": [x1, y1, x2, y2],
-        "buffered_bbox": list(bbox),
-        "padding": padding,
+        "bbox": list(bbox),
         "patch_path": patch_path,
         "edited_patch_path": edited_patch_path,
         "description": prompt,
@@ -56,12 +54,11 @@ if __name__ == "__main__":
     parser.add_argument("y1", type=int)
     parser.add_argument("x2", type=int)
     parser.add_argument("y2", type=int)
-    parser.add_argument("padding", type=int)
     parser.add_argument("session_name")
     parser.add_argument("prompt")
 
     args = parser.parse_args()
     run_pipeline(
         args.image_name, args.x1, args.y1, args.x2, args.y2,
-        args.padding, args.session_name, args.prompt
+        args.session_name, args.prompt
     )

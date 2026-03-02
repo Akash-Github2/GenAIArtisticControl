@@ -13,7 +13,6 @@ def add_coord_args(subparser):
     subparser.add_argument("--y1", type=int, required=True)
     subparser.add_argument("--x2", type=int, required=True)
     subparser.add_argument("--y2", type=int, required=True)
-    subparser.add_argument("--padding", type=int, required=True)
 
 
 def main():
@@ -36,12 +35,12 @@ def main():
 
     if args.method == "code-blend":
         run_code_blend(args.image_name, args.session_name, args.prompt,
-                       args.x1, args.y1, args.x2, args.y2, args.padding)
+                       args.x1, args.y1, args.x2, args.y2)
     elif args.method == "oneshot":
         run_oneshot(args.image_name, args.session_name, args.prompt)
     elif args.method == "llm-blend":
         run_llm_blend(args.image_name, args.session_name, args.prompt,
-                      args.x1, args.y1, args.x2, args.y2, args.padding)
+                      args.x1, args.y1, args.x2, args.y2)
 
 
 if __name__ == "__main__":

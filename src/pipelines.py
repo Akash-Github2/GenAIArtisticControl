@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append('src')
 
-from crop import crop_with_buffer, save_crop_metadata
+from crop import crop_region, save_crop_metadata
 from chatgpt_api import edit_image_with_api, blend_images_with_api
 from blend import blend_patch_back
 from composite import hard_paste
@@ -35,15 +35,13 @@ def _setup_paths(image_name, session_name, method):
     }
 
 
-def _crop_and_edit(paths, session_name, prompt, x1, y1, x2, y2, padding, total_steps):
+def _crop_and_edit(paths, session_name, prompt, x1, y1, x2, y2, total_steps):
     # crop
-    print(f"[1/{total_steps}] Cropping ({x1},{y1})-({x2},{y2}) padding={padding}px")
-    bbox = crop_with_buffer(paths["original"], x1, y1, x2, y2, padding, paths["patch"])
+    print(f"[1/{total_steps}] Cropping ({x1},{y1})-({x2},{y2})")
+    bbox = crop_region(paths["original"], x1, y1, x2, y2, paths["patch"])
     save_crop_metadata({
         "source_image": paths["original"],
-        "original_bbox": [x1, y1, x2, y2],
-        "buffered_bbox": list(bbox),
-        "padding": padding,
+        "bbox": list(bbox),
         "patch_path": paths["patch"],
         "edited_patch_path": paths["edited"],
         "description": prompt,
@@ -57,11 +55,11 @@ def _crop_and_edit(paths, session_name, prompt, x1, y1, x2, y2, padding, total_s
     print(f"       Edited: {paths['edited']}")
 
 
-def run_code_blend(image_name, session_name, prompt, x1, y1, x2, y2, padding):
+def run_code_blend(image_name, session_name, prompt, x1, y1, x2, y2):
     # crop -> edit -> poisson blend
     paths = _setup_paths(image_name, session_name, "code-blend")
 
-    _crop_and_edit(paths, session_name, prompt, x1, y1, x2, y2, padding, total_steps=3)
+    _crop_and_edit(paths, session_name, prompt, x1, y1, x2, y2, total_steps=3)
 
     print(f"[3/3] Blending (Poisson)")
     blend_patch_back(paths["original"], paths["edited"], paths["meta"], paths["output"])
@@ -83,11 +81,11 @@ def run_oneshot(image_name, session_name, prompt):
     return paths["output"]
 
 
-def run_llm_blend(image_name, session_name, prompt, x1, y1, x2, y2, padding):
+def run_llm_blend(image_name, session_name, prompt, x1, y1, x2, y2):
     # crop -> edit -> hard paste -> llm blend
     paths = _setup_paths(image_name, session_name, "llm-blend")
 
-    _crop_and_edit(paths, session_name, prompt, x1, y1, x2, y2, padding, total_steps=4)
+    _crop_and_edit(paths, session_name, prompt, x1, y1, x2, y2, total_steps=4)
 
     print(f"[3/4] Hard-pasting edited patch")
     hard_paste(paths["original"], paths["edited"], paths["meta"], paths["spliced"])

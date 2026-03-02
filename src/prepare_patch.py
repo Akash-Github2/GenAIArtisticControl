@@ -3,11 +3,11 @@ import os
 import argparse
 sys.path.append('src')
 
-from crop import crop_with_buffer, save_crop_metadata, get_patch_subdirectory
+from crop import crop_region, save_crop_metadata, get_patch_subdirectory
 from chatgpt_api import edit_image_with_api
 
 
-def prepare_patch(image_name, x1, y1, x2, y2, padding, session_name, description="", use_api=False):
+def prepare_patch(image_name, x1, y1, x2, y2, session_name, description="", use_api=False):
     original_path = f"data/originals/{image_name}.png"
     patch_dir = get_patch_subdirectory(original_path)
 
@@ -19,15 +19,13 @@ def prepare_patch(image_name, x1, y1, x2, y2, padding, session_name, description
     meta_path = os.path.join(patch_dir, f"{session_name}_meta.json")
     edited_patch_path = os.path.join(edited_dir, f"{session_name}_edited.png")
 
-    print(f"Cropping ({x1},{y1})-({x2},{y2}) with {padding}px padding...")
-    bbox = crop_with_buffer(original_path, x1, y1, x2, y2, padding, patch_path)
+    print(f"Cropping ({x1},{y1})-({x2},{y2})...")
+    bbox = crop_region(original_path, x1, y1, x2, y2, patch_path)
     print(f"  Patch: {patch_path} ({bbox[2]-bbox[0]}x{bbox[3]-bbox[1]}px)")
 
     meta = {
         "source_image": original_path,
-        "original_bbox": [x1, y1, x2, y2],
-        "buffered_bbox": list(bbox),
-        "padding": padding,
+        "bbox": list(bbox),
         "patch_path": patch_path,
         "edited_patch_path": edited_patch_path,
         "description": description,
@@ -60,7 +58,6 @@ if __name__ == "__main__":
     parser.add_argument("y1", type=int)
     parser.add_argument("x2", type=int)
     parser.add_argument("y2", type=int)
-    parser.add_argument("padding", type=int)
     parser.add_argument("session_name")
     parser.add_argument("description", nargs="?", default="")
     parser.add_argument("--use-api", action="store_true")
@@ -68,5 +65,5 @@ if __name__ == "__main__":
     args = parser.parse_args()
     prepare_patch(
         args.image_name, args.x1, args.y1, args.x2, args.y2,
-        args.padding, args.session_name, args.description, args.use_api
+        args.session_name, args.description, args.use_api
     )
