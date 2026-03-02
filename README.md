@@ -27,15 +27,15 @@ All three pipelines run through a single entry point:
 
 ```bash
 # code-blend: crop -> api edit -> poisson blend
-python src/run_pipeline.py code-blend portrait sky_birds "add a flock of birds flying in the sky" \
-  --x1 0 --y1 0 --x2 400 --y2 350 --padding 30
+python src/run_pipeline.py code-blend portrait birds_sky "add a flock of birds flying in the sky" \
+  --x1 30 --y1 30 --x2 400 --y2 400
 
 # oneshot: full image -> api edit (no coordinates needed)
-python src/run_pipeline.py oneshot portrait sky_birds "add a flock of birds flying in the sky"
+python src/run_pipeline.py oneshot portrait birds_sky "add a flock of birds flying in the sky"
 
 # llm-blend: crop -> api edit -> hard paste -> api blend
-python src/run_pipeline.py llm-blend portrait sky_birds "add a flock of birds flying in the sky" \
-  --x1 0 --y1 0 --x2 400 --y2 350 --padding 30
+python src/run_pipeline.py llm-blend portrait birds_sky "add a flock of birds flying in the sky" \
+  --x1 30 --y1 30 --x2 400 --y2 400
 ```
 
 Results go to `data/outputs/<image_name>/` with the method name in the filename, so you can compare them side by side.
@@ -45,14 +45,13 @@ Results go to `data/outputs/<image_name>/` with the method name in the filename,
 - `image_name` — filename (without .png) in `data/originals/`
 - `session_name` — name for this edit (used for all intermediate and output files)
 - `prompt` — what to edit
-- `--x1 --y1 --x2 --y2` — pixel coordinates of the region to edit (code-blend and llm-blend only)
-- `--padding` — extra pixels around the region for blending context (code-blend and llm-blend only)
+- `--x1 --y1 --x2 --y2` — pixel coordinates of the region to edit (code-blend and llm-blend only). Crop dimensions should match one of the API's output aspect ratios (1:1, 3:2, or 2:3) to avoid distortion during resize.
 
 ## How it works
 
 ### code-blend
 ```
-original -> crop region with padding -> send patch to gpt-image-1 -> resize back -> poisson blend into original -> output
+original -> crop region -> send patch to gpt-image-1 -> resize back -> poisson blend into original -> output
 ```
 
 ### oneshot
@@ -62,7 +61,7 @@ original -> send full image to gpt-image-1 -> resize back -> output
 
 ### llm-blend
 ```
-original -> crop region with padding -> send patch to gpt-image-1 -> resize back -> hard paste into original -> send original + spliced to gpt-image-1 for blending -> resize back -> output
+original -> crop region -> send patch to gpt-image-1 -> resize back -> hard paste into original -> send original + spliced to gpt-image-1 for blending -> resize back -> output
 ```
 
 ## Data layout
@@ -81,7 +80,7 @@ data/
 src/
   run_pipeline.py     CLI entry point for all three pipelines
   pipelines.py        pipeline orchestration (run_code_blend, run_oneshot, run_llm_blend)
-  crop.py             cropping with padding buffer + metadata
+  crop.py             cropping + metadata
   blend.py            poisson blending (cv2.seamlessClone)
   composite.py        hard paste (no blending, used as intermediate step)
   chatgpt_api.py      OpenAI API calls (single-image edit + two-image blend)
